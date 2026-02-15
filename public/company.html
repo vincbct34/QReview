@@ -1,0 +1,488 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Avis entreprise - QReview</title>
+    <meta name="theme-color" content="#a855f7" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/css/style.css" />
+  </head>
+
+  <body>
+    <div id="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+    <div class="container">
+      <header>
+        <div
+          style="
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+          "
+        >
+          <a
+            href="/"
+            style="
+              text-decoration: none;
+              color: var(--text-muted);
+              font-size: 0.9rem;
+              display: flex;
+              align-items: center;
+              gap: 6px;
+              transition: color 0.2s;
+            "
+          >
+            <span>&larr;</span>
+            <span>Accueil</span>
+          </a>
+          <div style="display: flex; align-items: center; gap: 12px">
+            <h1 id="company-name" style="margin: 0; font-size: 1.5rem">
+              Chargement...
+            </h1>
+            <a
+              href="/admin"
+              class="theme-toggle"
+              aria-label="Administration"
+              title="Admin"
+              style="text-decoration: none"
+            >
+              <span class="theme-icon">&#128274;</span>
+            </a>
+            <button
+              id="theme-toggle"
+              class="theme-toggle"
+              aria-label="Basculer theme clair/sombre"
+              title="Theme"
+            >
+              <span class="theme-icon">&#9790;</span>
+            </button>
+          </div>
+        </div>
+        <p
+          class="subtitle"
+          id="company-subtitle"
+          style="text-align: center; margin-top: 8px"
+        ></p>
+      </header>
+
+      <main>
+        <section class="card company-stats-card" style="margin-bottom: 24px">
+          <div id="company-stats" style="display: none">
+            <div class="company-stats-wrapper">
+              <div class="company-stats-content">
+                <div class="stats-left">
+                  <span id="avg-rating" class="avg-rating-large"></span>
+                </div>
+                <div class="stats-middle">
+                  <div id="avg-stars" class="stars-large"></div>
+                  <div id="review-count" class="review-count-text"></div>
+                </div>
+              </div>
+              <button
+                class="btn-secondary"
+                id="share-company-btn"
+                title="Partager cette page"
+              >
+                &#128279; Partager
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <div
+          class="controls-row"
+          style="
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+          "
+          id="sort-controls-wrapper"
+        >
+          <div id="sort-controls" style="display: none">
+            <button class="filter-btn active" data-sort="date_desc">
+              Plus récents
+            </button>
+            <button class="filter-btn" data-sort="date_asc">
+              Plus anciens
+            </button>
+            <button class="filter-btn" data-sort="rating_desc">
+              Meilleures notes
+            </button>
+            <button class="filter-btn" data-sort="rating_asc">
+              Notes basses
+            </button>
+          </div>
+        </div>
+
+        <div id="reviews-container"></div>
+
+        <div id="pagination" class="pagination"></div>
+      </main>
+    </div>
+
+    <footer>
+      <p>
+        &copy; <span id="footer-year"></span> QReview &mdash; Tous droits
+        reserves
+      </p>
+    </footer>
+
+    <!-- Social floating button -->
+    <div class="social-float">
+      <button
+        class="social-float-btn"
+        id="social-toggle"
+        aria-label="Réseaux sociaux"
+      >
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path
+            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"
+          />
+        </svg>
+      </button>
+      <div class="social-float-menu" id="social-menu">
+        <a
+          href="https://github.com/vincbct34"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"
+            />
+          </svg>
+          GitHub
+        </a>
+        <a
+          href="https://www.linkedin.com/in/vincent-bichat/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"
+            />
+          </svg>
+          LinkedIn
+        </a>
+        <a
+          href="https://portfolio.vincent-bichat.fr/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
+            />
+          </svg>
+          Site personnel
+        </a>
+        <a
+          href="https://404factory.vincent-bichat.fr"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z"
+            />
+          </svg>
+          Entreprise
+        </a>
+      </div>
+    </div>
+
+    <script>
+      // Theme management
+      function initTheme() {
+        const theme = localStorage.getItem("theme") || "dark";
+        document.documentElement.setAttribute("data-theme", theme);
+      }
+      function toggleTheme() {
+        const current = document.documentElement.getAttribute("data-theme");
+        const next = current === "dark" ? "light" : "dark";
+        document.documentElement.setAttribute("data-theme", next);
+        localStorage.setItem("theme", next);
+      }
+      initTheme();
+      document
+        .getElementById("theme-toggle")
+        .addEventListener("click", toggleTheme);
+
+      document.getElementById("footer-year").textContent =
+        new Date().getFullYear();
+
+      const companySlug = decodeURIComponent(
+        window.location.pathname.split("/company/")[1] || "",
+      );
+      let currentSort = "date_desc";
+      let currentPage = 1;
+
+      if (!companySlug) {
+        document.getElementById("company-name").textContent =
+          "Entreprise introuvable";
+        document.getElementById("reviews-container").innerHTML =
+          '<p class="no-results">Nom d\'entreprise manquant.</p>';
+      } else {
+        loadCompany();
+      }
+
+      async function loadCompany(page = 1, sort = currentSort) {
+        currentPage = page;
+        currentSort = sort;
+        const container = document.getElementById("reviews-container");
+        container.innerHTML =
+          '<p class="loading-text">Chargement des avis...</p>';
+
+        try {
+          const params = new URLSearchParams({
+            company: companySlug,
+            page,
+            sort,
+            limit: 20,
+          });
+          const res = await fetch("/api/reviews?" + params);
+          const data = await res.json();
+
+          document.getElementById("company-name").textContent = companySlug;
+          document.title = companySlug + " - Avis | QReview";
+
+          if (data.total === 0) {
+            document.getElementById("company-subtitle").textContent =
+              "Aucun avis pour cette entreprise";
+            container.innerHTML =
+              '<p class="no-results">Aucun avis valide pour cette entreprise.</p>';
+            return;
+          }
+
+          // Stats
+          const ratings = data.reviews.map((r) => r.rating);
+          const avg = (
+            ratings.reduce((a, b) => a + b, 0) / ratings.length
+          ).toFixed(1);
+          document.getElementById("avg-rating").textContent = avg;
+          document.getElementById("avg-stars").textContent =
+            "\u2605".repeat(Math.round(parseFloat(avg))) +
+            "\u2606".repeat(5 - Math.round(parseFloat(avg)));
+          document.getElementById("review-count").textContent =
+            data.total + " avis";
+          document.getElementById("company-stats").style.display = "flex";
+          document.getElementById("sort-controls").style.display = "flex";
+
+          // Render cards
+          container.innerHTML = data.reviews
+            .map((r, i) => renderCard(r, i))
+            .join("");
+
+          // Pagination
+          renderPagination(data.totalPages, data.page);
+        } catch (err) {
+          container.innerHTML =
+            '<p class="no-results">Erreur lors du chargement.</p>';
+        }
+      }
+
+      function renderCard(r, index) {
+        const stars = "\u2605".repeat(r.rating) + "\u2606".repeat(5 - r.rating);
+        const date = new Date(r.created_at).toLocaleDateString("fr-FR", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        });
+        const comment = r.comment
+          ? escapeHtml(r.comment)
+          : '<em style="opacity:0.4;">Aucun commentaire</em>';
+        const verified = r.company_verified
+          ? '<span class="verified-badge" title="SIRET verifie">&#10003; Verifie</span>'
+          : "";
+        const linkedinVerified = r.linkedin_verified
+          ? '<span class="verified-badge" style="background: linear-gradient(135deg, #0077B5 0%, #005885 100%);" title="Identite LinkedIn verifiee">&#10003; LinkedIn</span>'
+          : "";
+        const reply = r.admin_reply
+          ? '<div class="admin-reply"><strong>Reponse de l\'entreprise</strong><p>' +
+            escapeHtml(r.admin_reply) +
+            "</p></div>"
+          : "";
+        const permalink =
+          '<a href="/review/' +
+          r.id +
+          '" class="permalink-link" title="Lien permanent">#' +
+          r.id +
+          "</a>";
+
+        return (
+          '<div class="review-card" style="animation-delay:' +
+          index * 0.05 +
+          's;">' +
+          '<div class="review-header">' +
+          '<div class="review-rating"><span class="stars">' +
+          stars +
+          "</span>" +
+          verified +
+          linkedinVerified +
+          "</div>" +
+          '<div class="review-meta"><span>' +
+          escapeHtml(r.position) +
+          "</span><span>" +
+          escapeHtml(r.duration) +
+          "</span><span>" +
+          date +
+          "</span>" +
+          permalink +
+          "</div>" +
+          "</div>" +
+          '<div class="review-comment">' +
+          comment +
+          "</div>" +
+          reply +
+          "</div>"
+        );
+      }
+
+      function renderPagination(totalPages, current) {
+        const container = document.getElementById("pagination");
+        if (totalPages <= 1) {
+          container.innerHTML = "";
+          return;
+        }
+        let html =
+          '<button class="page-btn" onclick="loadCompany(' +
+          (current - 1) +
+          ')" ' +
+          (current <= 1 ? "disabled" : "") +
+          ">&larr;</button>";
+        const start = Math.max(1, current - 2);
+        const end = Math.min(totalPages, current + 2);
+        for (let i = start; i <= end; i++) {
+          html +=
+            '<button class="page-btn ' +
+            (i === current ? "active" : "") +
+            '" onclick="loadCompany(' +
+            i +
+            ')">' +
+            i +
+            "</button>";
+        }
+        html +=
+          '<button class="page-btn" onclick="loadCompany(' +
+          (current + 1) +
+          ')" ' +
+          (current >= totalPages ? "disabled" : "") +
+          ">&rarr;</button>";
+        container.innerHTML = html;
+      }
+
+      function escapeHtml(text) {
+        if (!text) return "";
+        const d = document.createElement("div");
+        d.textContent = text;
+        return d.innerHTML;
+      }
+
+      function shareCompany() {
+        const url = window.location.href;
+        console.log("Tentative de partage:", url);
+
+        if (navigator.share) {
+          navigator
+            .share({ title: companySlug + " - QReview", url })
+            .then(() => showToast("Partage effectué !"))
+            .catch((err) => {
+              console.log("Share cancelled or failed:", err);
+              // Fallback to clipboard if share is cancelled
+              copyToClipboard(url);
+            });
+        } else {
+          copyToClipboard(url);
+        }
+      }
+
+      function copyToClipboard(text) {
+        // Try modern clipboard API first
+        if (navigator.clipboard && window.isSecureContext) {
+          navigator.clipboard
+            .writeText(text)
+            .then(() => showToast("Lien copié !"))
+            .catch(() => fallbackCopy(text));
+        } else {
+          fallbackCopy(text);
+        }
+      }
+
+      function fallbackCopy(text) {
+        // Fallback using textarea method
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        textarea.style.position = "fixed";
+        textarea.style.opacity = "0";
+        document.body.appendChild(textarea);
+        textarea.select();
+        try {
+          document.execCommand("copy");
+          showToast("Lien copié !");
+        } catch (err) {
+          console.error("Copy failed:", err);
+          showToast("Erreur lors de la copie", "error");
+        }
+        document.body.removeChild(textarea);
+      }
+
+      function showToast(msg, type = "success") {
+        const container = document.getElementById("toast-container");
+        if (!container) return;
+        const t = document.createElement("div");
+        t.className = "toast " + type;
+        t.textContent = msg;
+        container.appendChild(t);
+        setTimeout(() => {
+          t.classList.add("closing");
+          setTimeout(() => t.remove(), 300);
+        }, 3000);
+      }
+
+      // Sort buttons
+      document.querySelectorAll(".filter-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          document
+            .querySelectorAll(".filter-btn")
+            .forEach((b) => b.classList.remove("active"));
+          btn.classList.add("active");
+          loadCompany(1, btn.dataset.sort);
+        });
+      });
+
+      // Share button
+      const shareBtn = document.getElementById("share-company-btn");
+      if (shareBtn) {
+        shareBtn.addEventListener("click", shareCompany);
+      }
+
+      // Expose functions to window for onclick handlers
+      window.shareCompany = shareCompany;
+      window.loadCompany = loadCompany;
+
+      // Social floating button
+      const socialToggle = document.getElementById("social-toggle");
+      const socialMenu = document.getElementById("social-menu");
+      if (socialToggle && socialMenu) {
+        socialToggle.addEventListener("click", (e) => {
+          e.stopPropagation();
+          socialMenu.classList.toggle("show");
+        });
+
+        // Close menu when clicking outside
+        document.addEventListener("click", (e) => {
+          if (!e.target.closest(".social-float")) {
+            socialMenu.classList.remove("show");
+          }
+        });
+      }
+    </script>
+  </body>
+</html>
