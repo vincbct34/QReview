@@ -829,3 +829,43 @@ async function loadAdminQRCode() {
       '<p style="color: var(--text-muted);">Erreur lors de la generation du QR code.</p>';
   }
 }
+
+// ── QR Code Download ──
+
+async function downloadQRCodePNG() {
+  try {
+    const response = await adminFetch("/admin/api/qrcode/download");
+    if (!response.ok) throw new Error();
+    const blob = await response.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `qreview-qrcode-${new Date().toISOString().slice(0, 10)}.png`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showAdminToast("QR Code PNG téléchargé", "success");
+  } catch (_) {
+    showAdminToast("Erreur lors du téléchargement PNG", "error");
+  }
+}
+
+async function downloadQRCodeSVG() {
+  try {
+    const response = await adminFetch("/admin/api/qrcode/svg");
+    if (!response.ok) throw new Error();
+    const blob = await response.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `qreview-qrcode-${new Date().toISOString().slice(0, 10)}.svg`;
+    a.click();
+    URL.revokeObjectURL(url);
+    showAdminToast("QR Code SVG téléchargé", "success");
+  } catch (_) {
+    showAdminToast("Erreur lors du téléchargement SVG", "error");
+  }
+}
+
+// Expose functions globally for onclick handlers
+window.downloadQRCodePNG = downloadQRCodePNG;
+window.downloadQRCodeSVG = downloadQRCodeSVG;

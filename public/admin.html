@@ -164,12 +164,20 @@
           class="qr-download-buttons"
           style="display: flex; justify-content: center; gap: 12px"
         >
-          <a href="/admin/api/qrcode/download" class="btn-secondary" download
-            >Télécharger PNG</a
+          <button
+            type="button"
+            onclick="downloadQRCodePNG()"
+            class="btn-secondary"
           >
-          <a href="/admin/api/qrcode/svg" class="btn-secondary" download
-            >Télécharger SVG</a
+            Télécharger PNG
+          </button>
+          <button
+            type="button"
+            onclick="downloadQRCodeSVG()"
+            class="btn-secondary"
           >
+            Télécharger SVG
+          </button>
         </div>
       </section>
 
