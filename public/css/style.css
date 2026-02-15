@@ -1649,6 +1649,14 @@ footer a:hover {
     gap: 20px;
   }
 
+  .stats-summary {
+    min-width: auto;
+  }
+
+  .stats-bars {
+    width: 100%;
+  }
+
   .reviews-controls {
     flex-direction: column;
     gap: 10px;
