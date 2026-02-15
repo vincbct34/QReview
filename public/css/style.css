@@ -244,6 +244,12 @@ main {
   border-radius: 2px;
 }
 
+/* Ensure card content is above ::after pseudo-element */
+.card > * {
+  position: relative;
+  z-index: 1;
+}
+
 /* ===== STATISTICS SECTION ===== */
 .stats-card {
   padding: 28px 32px;

@@ -844,7 +844,7 @@ async function downloadQRCodePNG() {
     a.click();
     URL.revokeObjectURL(url);
     showAdminToast("QR Code PNG téléchargé", "success");
-  } catch (_) {
+  } catch (error) {
     showAdminToast("Erreur lors du téléchargement PNG", "error");
   }
 }
@@ -861,11 +861,17 @@ async function downloadQRCodeSVG() {
     a.click();
     URL.revokeObjectURL(url);
     showAdminToast("QR Code SVG téléchargé", "success");
-  } catch (_) {
+  } catch (error) {
     showAdminToast("Erreur lors du téléchargement SVG", "error");
   }
 }
 
-// Expose functions globally for onclick handlers
-window.downloadQRCodePNG = downloadQRCodePNG;
-window.downloadQRCodeSVG = downloadQRCodeSVG;
+// Attach event listeners to download buttons
+document.addEventListener("DOMContentLoaded", () => {
+  document
+    .getElementById("download-png-btn")
+    ?.addEventListener("click", downloadQRCodePNG);
+  document
+    .getElementById("download-svg-btn")
+    ?.addEventListener("click", downloadQRCodeSVG);
+});
