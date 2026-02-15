@@ -1,127 +1,180 @@
 # QReview
 
-Application de collecte d'avis entreprises accessible via QR code.
+Application web de collecte d'avis entreprises avec vérification SIRET et OAuth LinkedIn.
 
-## Fonctionnalites
+## Fonctionnalités
 
-- Formulaire de soumission d'avis avec validation par email
-- Affichage des avis valides
-- QR code genere automatiquement pour faciliter l'acces
-- Design responsive et moderne
+### Côté utilisateur
+- **Soumission d'avis** avec formulaire validé
+- **Vérification d'entreprise** via API SIRET (INSEE)
+- **Vérification d'identité** via LinkedIn OAuth (optionnel)
+- **Consultation des avis** avec pagination et tri
+- **Pages dédiées** par entreprise et avis individuel
+- **Design responsive** avec thème clair/sombre
+- **Partage social** avec Web Share API
 
-## Deploiement sur Railway
+### Côté admin
+- **Panel d'administration** protégé par mot de passe
+- **Modération des avis** (validation, suppression, réponse)
+- **Actions groupées** (validation/suppression en masse)
+- **Filtrage et recherche** d'avis
+- **Export CSV** des données
+- **Génération QR code** (admin uniquement)
+- **Statistiques** en temps réel
 
-### 1. Prerequis
+## Déploiement sur Railway
+
+### 1. Prérequis
 
 - Un compte Railway (https://railway.app/)
-- Git installe sur votre machine
+- Git installé sur votre machine
 
-### 2. Initialiser Git
+### 2. Initialiser et pousser sur GitHub
 
 ```bash
 cd QReview
 git init
 git add .
 git commit -m "Initial commit"
-```
 
-### 3. Creer un repository GitHub
-
-1. Allez sur https://github.com/new
-2. Crez un nouveau repository (ex: `qreview`)
-3. Poussez votre code :
-
-```bash
+# Créer le repo sur GitHub puis
 git remote add origin https://github.com/VOTRE_USERNAME/qreview.git
 git branch -M main
 git push -u origin main
 ```
 
-### 4. Deployer sur Railway
+### 3. Déployer sur Railway
 
 1. Allez sur https://railway.app/
-2. Cliquez sur "New Project"
-3. Selectionnez "Deploy from GitHub repo"
-4. Choisissez votre repository `qreview`
+2. Cliquez sur "New Project" → "Deploy from GitHub repo"
+3. Sélectionnez votre repository
+
+### 4. Configurer la base de données
+
+Cliquez sur "New Service" → "Database" → "PostgreSQL"
+
+Railway créera automatiquement la variable `DATABASE_URL`.
 
 ### 5. Configurer les variables d'environnement
 
-Dans votre projet Railway, allez dans l'onglet "Variables" et ajoutez :
+Dans l'onglet "Variables" de votre projet Railway, ajoutez :
 
-#### Pour la base de donnees :
-Railway va automatiquement creer `DATABASE_URL` quand vous ajouterez un service PostgreSQL.
-
-Cliquez sur "New Service" -> "Database" -> "PostgreSQL"
-
-#### Pour les emails (recommande pour utiliser des emails reels) :
-
-**Option 1 - Gmail (gratuit)** :
-- Activez la verification en 2 etapes sur votre compte Google
-- Crez un "Mot de passe d'application" : https://myaccount.google.com/apppasswords
-- Utilisez ces variables :
-  - `SMTP_HOST` = `smtp.gmail.com`
-  - `SMTP_PORT` = `587`
-  - `SMTP_USER` = `votre-email@gmail.com`
-  - `SMTP_PASS` = `le-mot-de-passe-d-application`
-
-**Option 2 - Brevo (anciennement Sendinblue, gratuit jusqu'a 300 emails/jour)** :
-- Crez un compte sur https://www.brevo.com/
-- Allez dans Parametres -> Cles API SMTP
-- Utilisez ces variables :
-  - `SMTP_HOST` = `smtp-relay.brevo.com`
-  - `SMTP_PORT` = `587`
-  - `SMTP_USER` = `votre-login-brevo`
-  - `SMTP_PASS` = `votre-cle-api-smtp`
-
-#### Variables generales :
-- `BASE_URL` = `https://votre-app.railway.app` (l'URL de votre app Railway)
-- `EMAIL_FROM` = `noreply@votre-domaine.com` (adresse d'envoi)
-- `NODE_ENV` = `production`
-
-### 6. Redeployer
-
-Apres avoir configure les variables, Railway redeploiera automatiquement votre application.
-
-### 7. Obtenir le QR Code
-
-Une fois deploye, votre application sera accessible a l'URL Railway. Vous pouvez :
-1. Telecharger le QR code directement depuis la page d'accueil
-2. L'imprimer et le coller sur votre CV
-
-## Developpement local
-
-1. Copiez `.env.example` vers `.env`
-2. Configurez les variables d'environnement dans `.env`
-3. Lancez le serveur :
+#### Obligatoires
 
 ```bash
+# Application
+NODE_ENV=production
+BASE_URL=https://votre-app.railway.app
+PORT=3000
+
+# Admin
+ADMIN_PASSWORD=votre_mot_de_passe_admin
+
+# Session (sécurité)
+SESSION_SECRET=chaine_aleatoire_longue_et_securisee
+```
+
+#### Optionnelles - LinkedIn OAuth
+
+Pour permettre la vérification d'identité LinkedIn :
+
+1. Créez une app sur https://www.linkedin.com/developers/apps
+2. Ajoutez les Redirect URLs :
+   - Dev : `http://localhost:3000/auth/linkedin/callback`
+   - Prod : `https://votre-app.railway.app/auth/linkedin/callback`
+3. Activez "Sign In with LinkedIn using OpenID Connect"
+
+```bash
+LINKEDIN_CLIENT_ID=votre_client_id
+LINKEDIN_CLIENT_SECRET=votre_client_secret
+```
+
+### 6. Accéder à l'application
+
+- **Public** : `https://votre-app.railway.app`
+- **Admin** : `https://votre-app.railway.app/admin`
+
+## Développement local
+
+1. Installez les dépendances :
+```bash
 npm install
+```
+
+2. Configurez l'environnement :
+```bash
+cp .env.example .env
+# Éditez .env avec vos valeurs
+```
+
+3. Lancez le serveur :
+```bash
 npm start
 ```
 
 L'application sera accessible sur http://localhost:3000
+
+## Tests
+
+```bash
+npm test
+```
 
 ## Structure du projet
 
 ```
 QReview/
 ├── src/
-│   └── server.js         # Backend Express
+│   ├── server.js          # Serveur Express
+│   ├── db/                # Couche d'abstraction DB (SQLite/PostgreSQL)
+│   ├── routes/            # API routes
+│   ├── middleware/        # Auth, rate limiting, error handling
+│   └── utils/             # Validators, logger, SIRET API
 ├── public/
-│   ├── index.html        # Page d'accueil
-│   ├── css/
-│   │   └── style.css     # Styles
-│   └── js/
-│       └── script.js     # Scripts client
-├── .env.example          # Exemple de configuration
-├── railway.json          # Configuration Railway
-└── package.json          # Dependances
+│   ├── index.html         # Page d'accueil
+│   ├── admin.html         # Panel admin
+│   ├── company.html       # Page entreprise
+│   ├── review.html        # Page avis individuel
+│   ├── css/               # Styles
+│   └── js/                # Scripts client
+├── tests/                 # Tests API
+└── package.json
 ```
 
 ## API Endpoints
 
-- `POST /api/reviews` - Soumettre un avis
-- `GET /api/reviews` - Recuperer les avis valides
-- `GET /api/validate/:token` - Valider un avis
-- `GET /api/qrcode` - Obtenir le QR code
+### Public
 - `GET /health` - Health check
+- `GET /api/reviews` - Liste des avis validés (paginée)
+- `GET /api/reviews/:id` - Avis individuel
+- `GET /api/reviews/stats` - Statistiques globales
+- `POST /api/reviews` - Soumettre un avis
+- `POST /api/reviews/:id/flag` - Signaler un avis
+- `GET /auth/linkedin` - Initier LinkedIn OAuth
+- `GET /auth/linkedin/callback` - Callback OAuth
+
+### Admin (protégé)
+- `POST /admin/login` - Connexion admin
+- `POST /admin/logout` - Déconnexion
+- `GET /admin/reviews` - Liste tous les avis
+- `PUT /admin/reviews/:id/validate` - Valider un avis
+- `DELETE /admin/reviews/:id` - Supprimer un avis
+- `POST /admin/reviews/bulk/validate` - Validation groupée
+- `POST /admin/reviews/bulk/delete` - Suppression groupée
+- `POST /admin/reviews/:id/reply` - Répondre à un avis
+- `PUT /admin/reviews/:id/flag` - Marquer/démarquer
+- `GET /admin/export/csv` - Export CSV
+- `GET /admin/api/qrcode` - QR code (admin)
+
+## Sécurité
+
+- Rate limiting sur toutes les routes API
+- Protection contre les injections SQL (requêtes préparées)
+- Validation des entrées utilisateur
+- Session HTTP-only et secure en production
+- Headers de sécurité via Helmet
+- Vérification SIRET pour confirmer l'existence de l'entreprise
+
+## License
+
+ISC
