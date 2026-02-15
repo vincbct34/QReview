@@ -137,6 +137,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initIntersectionObserver();
   initCommentCounter();
   initLinkedIn();
+  initRatingInteraction();
 
   // Theme toggle button
   const themeBtn = document.getElementById("theme-toggle");
@@ -698,9 +699,16 @@ function escapeHtml(text) {
 }
 
 // ── Rating interaction ──
-document.querySelectorAll(".rating input").forEach((input) => {
-  input.addEventListener("change", () => {
-    const ratingError = document.getElementById("rating-error");
-    if (ratingError) ratingError.textContent = "";
+function initRatingInteraction() {
+  const ratingContainer = document.querySelector(".rating");
+  if (!ratingContainer) return;
+
+  // Clear error when rating changes
+  ratingContainer.querySelectorAll('input[name="rating"]').forEach((input) => {
+    input.addEventListener("change", () => {
+      const ratingError = document.getElementById("rating-error");
+      if (ratingError) ratingError.textContent = "";
+      console.log("Rating changed to:", input.value);
+    });
   });
-});
+}

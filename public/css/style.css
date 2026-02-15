@@ -569,8 +569,12 @@ main {
 }
 
 .rating label:hover,
-.rating label:hover ~ label,
 .rating input[type="radio"]:checked ~ label {
+  color: var(--star-active);
+}
+
+/* On hover, also color previous stars (using flex with row-reverse) */
+.rating label:hover ~ label {
   color: var(--star-active);
 }
 
@@ -1655,6 +1659,19 @@ footer a:hover {
 
   .stats-bars {
     width: 100%;
+    gap: 4px;
+  }
+
+  .stats-bar-row {
+    gap: 6px;
+  }
+
+  .stats-bar-row span:first-child {
+    width: 12px;
+  }
+
+  .stats-bar-row span:last-child {
+    width: 24px;
   }
 
   .reviews-controls {
