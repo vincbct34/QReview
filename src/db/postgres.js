@@ -39,6 +39,8 @@ async function init() {
     `);
     // Migrate: add columns if missing
     const migrations = [
+      "ALTER TABLE reviews ADD COLUMN IF NOT EXISTS siret VARCHAR(14)",
+      "ALTER TABLE reviews ADD COLUMN IF NOT EXISTS company_verified BOOLEAN DEFAULT FALSE",
       "ALTER TABLE reviews ADD COLUMN IF NOT EXISTS admin_reply TEXT",
       "ALTER TABLE reviews ADD COLUMN IF NOT EXISTS flagged BOOLEAN DEFAULT FALSE",
       "ALTER TABLE reviews ADD COLUMN IF NOT EXISTS tags TEXT",
