@@ -1,0 +1,11 @@
+[phases.build]
+nixPkgs = ["python3", "pkg-config", "gcc"]
+
+[phases.install]
+cmds = ["npm ci"]
+
+[phases.start]
+cmd = "npm start"
+
+[variables]
+NODE_VERSION = "20"
