@@ -542,12 +542,16 @@ form.addEventListener("submit", async (e) => {
 
   const formData = new FormData(e.target);
 
+  // Get rating explicitly to avoid FormData issues with radio buttons
+  const checkedRating = document.querySelector('input[name="rating"]:checked');
+  const ratingValue = checkedRating ? checkedRating.value : null;
+
   const data = {
     company_name: formData.get("company"),
     position: formData.get("position"),
     duration: formData.get("duration"),
     email: formData.get("email"),
-    rating: formData.get("rating"),
+    rating: ratingValue,
     comment: formData.get("comment") || null,
     siret: formData.get("siret") || null,
   };

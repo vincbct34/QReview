@@ -81,12 +81,9 @@ router.post(
     // Anti-spam: check duplicate review from same email for same company (24h window)
     const isDuplicate = await db.checkDuplicateReview(email, company_name);
     if (isDuplicate) {
-      return res
-        .status(429)
-        .json({
-          error:
-            "You have already submitted a review for this company recently.",
-        });
+      return res.status(429).json({
+        error: "You have already submitted a review for this company recently.",
+      });
     }
 
     // Verify SIRET if provided

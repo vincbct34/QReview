@@ -5,6 +5,7 @@ Application web de collecte d'avis entreprises avec vérification SIRET et OAuth
 ## Fonctionnalités
 
 ### Côté utilisateur
+
 - **Soumission d'avis** avec formulaire validé
 - **Vérification d'entreprise** via API SIRET (INSEE)
 - **Vérification d'identité** via LinkedIn OAuth (optionnel)
@@ -14,6 +15,7 @@ Application web de collecte d'avis entreprises avec vérification SIRET et OAuth
 - **Partage social** avec Web Share API
 
 ### Côté admin
+
 - **Panel d'administration** protégé par mot de passe
 - **Modération des avis** (validation, suppression, réponse)
 - **Actions groupées** (validation/suppression en masse)
@@ -97,17 +99,20 @@ LINKEDIN_CLIENT_SECRET=votre_client_secret
 ## Développement local
 
 1. Installez les dépendances :
+
 ```bash
 npm install
 ```
 
 2. Configurez l'environnement :
+
 ```bash
 cp .env.example .env
 # Éditez .env avec vos valeurs
 ```
 
 3. Lancez le serveur :
+
 ```bash
 npm start
 ```
@@ -144,6 +149,7 @@ QReview/
 ## API Endpoints
 
 ### Public
+
 - `GET /health` - Health check
 - `GET /api/reviews` - Liste des avis validés (paginée)
 - `GET /api/reviews/:id` - Avis individuel
@@ -154,6 +160,7 @@ QReview/
 - `GET /auth/linkedin/callback` - Callback OAuth
 
 ### Admin (protégé)
+
 - `POST /admin/login` - Connexion admin
 - `POST /admin/logout` - Déconnexion
 - `GET /admin/reviews` - Liste tous les avis
