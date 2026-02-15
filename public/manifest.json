@@ -1,0 +1,20 @@
+{
+  "name": "QReview - Avis Entreprises Certifies",
+  "short_name": "QReview",
+  "description": "Plateforme d'avis certifies avec verification SIRET et QR Code",
+  "lang": "fr-FR",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0f",
+  "theme_color": "#a855f7",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["business", "utilities"]
+}
