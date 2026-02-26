@@ -960,17 +960,41 @@ main {
   border-radius: 10px;
   font-size: 0.85rem;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   text-decoration: none;
   font-family: inherit;
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  position: relative;
+  overflow: hidden;
+}
+
+.share-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-hover) 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: inherit;
 }
 
 .share-btn:hover {
   border-color: var(--accent);
-  color: var(--text-primary);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(168, 85, 247, 0.3);
+}
+
+.share-btn:hover::before {
+  opacity: 1;
+}
+
+.share-btn span,
+.share-btn svg {
+  position: relative;
+  z-index: 1;
 }
 
 /* Admin reply within review card */
@@ -1526,13 +1550,46 @@ footer a:hover {
   border-radius: 10px;
   text-decoration: none;
   color: var(--text);
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   font-size: 0.9rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.social-float-menu a::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 0;
+  background: linear-gradient(90deg, var(--accent) 0%, var(--accent-hover) 100%);
+  transition: width 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: inherit;
 }
 
 .social-float-menu a:hover {
-  background: var(--accent-hover);
   color: white;
+  transform: translateX(4px);
+}
+
+.social-float-menu a:hover::before {
+  width: 100%;
+}
+
+.social-float-menu a svg {
+  position: relative;
+  z-index: 1;
+  transition: transform 0.3s ease;
+}
+
+.social-float-menu a:hover svg {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.social-float-menu a span {
+  position: relative;
+  z-index: 1;
 }
 
 .social-float-menu a svg {
@@ -1790,6 +1847,14 @@ footer a:hover {
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
 }
 
+[data-theme="light"] .social-float-menu a:hover {
+  color: #7c3aed;
+}
+
+[data-theme="light"] .social-float-menu a:hover::before {
+  opacity: 0;
+}
+
 [data-theme="light"] .sort-select:focus {
   border-color: #7c3aed;
   box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
@@ -1935,5 +2000,11 @@ footer a:hover {
 
 [data-theme="light"] .share-btn:hover {
   border-color: #7c3aed;
-  background: rgba(124, 58, 237, 0.04);
+  color: #7c3aed;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(124, 58, 237, 0.25);
+}
+
+[data-theme="light"] .share-btn:hover::before {
+  opacity: 0;
 }
