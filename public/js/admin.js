@@ -15,13 +15,18 @@ let selectedIds = new Set();
 function updateThemeIcon() {
   const btn = document.getElementById("theme-toggle-dashboard");
   const loginBtn = document.getElementById("theme-toggle-login");
-  const isLight = document.documentElement.getAttribute("data-theme") === "light";
+  const isLight =
+    document.documentElement.getAttribute("data-theme") === "light";
 
   if (btn && btn.querySelector(".theme-icon")) {
-    btn.querySelector(".theme-icon").innerHTML = isLight ? "&#9728;" : "&#9790;";
+    btn.querySelector(".theme-icon").innerHTML = isLight
+      ? "&#9728;"
+      : "&#9790;";
   }
   if (loginBtn && loginBtn.querySelector(".theme-icon")) {
-    loginBtn.querySelector(".theme-icon").innerHTML = isLight ? "&#9728;" : "&#9790;";
+    loginBtn.querySelector(".theme-icon").innerHTML = isLight
+      ? "&#9728;"
+      : "&#9790;";
   }
 }
 
@@ -199,7 +204,7 @@ document.getElementById("logout-btn").addEventListener("click", async () => {
       method: "POST",
       headers: { Authorization: `Bearer ${authToken}` },
     });
-  } catch (_) { }
+  } catch (_) {}
   authToken = null;
   localStorage.removeItem("qreview_admin_token");
   showAdminToast("Deconnecte", "info");
@@ -282,7 +287,7 @@ async function loadAdminStats() {
     document.getElementById("stat-avg").textContent = stats.average_rating
       ? `${stats.average_rating}/5`
       : "-";
-  } catch (_) { }
+  } catch (_) {}
 }
 
 // ── Search ──
@@ -654,8 +659,8 @@ function renderAdminCard(r) {
 
   const reply = r.admin_reply
     ? '<div class="admin-review-reply"><strong>Votre reponse</strong><p>' +
-    escapeHtml(r.admin_reply) +
-    "</p></div>"
+      escapeHtml(r.admin_reply) +
+      "</p></div>"
     : "";
 
   return (
