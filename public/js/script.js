@@ -120,7 +120,7 @@ function populateFormWithLinkedIn(data) {
     authorNameInput.readOnly = true; // Lock field
     if (authorNameHelp) {
       authorNameHelp.textContent =
-        "Verifie via LinkedIn - sera affiche publiquement";
+        "Vérifié via LinkedIn - sera affiché publiquement";
       authorNameHelp.style.color = "var(--primary)";
     }
   }
@@ -264,7 +264,7 @@ async function loadStats() {
         </div>
       `;
     }
-  } catch (_) {}
+  } catch (_) { }
 }
 
 // ── Reviews with pagination, sort & filter ──
@@ -307,9 +307,8 @@ async function loadReviews(page = 1) {
         <div class="review-header">
           <span class="company-name">
             <a href="/company/${encodeURIComponent(review.company_name)}" class="company-link">${escapeHtml(review.company_name)}</a>
-            ${
-              review.author_name
-                ? `
+            ${review.author_name
+            ? `
               <span class="review-author">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle>
@@ -317,7 +316,7 @@ async function loadReviews(page = 1) {
                 ${escapeHtml(review.author_name)}
               </span>
             `
-                : `
+            : `
               <span class="review-author" style="opacity: 0.5;">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle>
@@ -325,10 +324,9 @@ async function loadReviews(page = 1) {
                 Anonyme
               </span>
             `
-            }
-            ${
-              review.company_verified
-                ? `
+          }
+            ${review.company_verified
+            ? `
               <span class="verified-badge">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="14" height="14">
                   <path d="M9 12l2 2 4-4"/>
@@ -337,11 +335,10 @@ async function loadReviews(page = 1) {
                 Verifiée
               </span>
             `
-                : ""
-            }
-            ${
-              review.linkedin_verified
-                ? `
+            : ""
+          }
+            ${review.linkedin_verified
+            ? `
               <span class="verified-badge" style="background: linear-gradient(135deg, #0077B5 0%, #005885 100%);" title="Identite LinkedIn verifiée">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
@@ -349,8 +346,8 @@ async function loadReviews(page = 1) {
                 LinkedIn
               </span>
             `
-                : ""
-            }
+            : ""
+          }
           </span>
           <span class="review-stars">${"\u2605".repeat(review.rating)}${"\u2606".repeat(5 - review.rating)}</span>
         </div>
@@ -369,8 +366,7 @@ async function loadReviews(page = 1) {
           </span>
         </div>
         ${review.comment ? `<p class="review-comment">${escapeHtml(review.comment)}</p>` : ""}
-        ${
-          review.admin_reply
+        ${review.admin_reply
             ? `
           <div class="review-reply">
             <strong>Reponse du proprietaire</strong>
@@ -378,7 +374,7 @@ async function loadReviews(page = 1) {
           </div>
         `
             : ""
-        }
+          }
         <div style="display: flex; justify-content: space-between; align-items: center;">
           <span class="review-date"><a href="/review/${review.id}" class="permalink-link" title="Lien permanent">#${review.id}</a> &middot; ${timeAgo(review.created_at)}</span>
           <button class="flag-btn" data-flag-id="${review.id}" onclick="flagReview(${review.id})" aria-label="Signaler cet avis" title="Signaler">&#9873; Signaler</button>
