@@ -334,6 +334,12 @@
 
           const companyUrl = "/company/" + encodeURIComponent(r.company_name);
 
+          const authorNameHtml = r.author_name
+            ? '<p class="review-author" style="font-size: 0.9rem; opacity: 0.7; margin-bottom: 8px;">Par <strong>' +
+              escapeHtml(r.author_name) +
+              "</strong></p>"
+            : "";
+
           document.getElementById("review-container").innerHTML =
             '<div class="review-card">' +
             '<a href="' +
@@ -343,6 +349,7 @@
             "</a>" +
             verified +
             linkedinVerified +
+            authorNameHtml +
             '<p class="review-date">' +
             date +
             "</p>" +

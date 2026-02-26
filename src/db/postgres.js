@@ -47,6 +47,7 @@ async function init() {
       "ALTER TABLE reviews ADD COLUMN IF NOT EXISTS linkedin_id VARCHAR(255)",
       "ALTER TABLE reviews ADD COLUMN IF NOT EXISTS linkedin_verified BOOLEAN DEFAULT FALSE",
       "ALTER TABLE reviews ADD COLUMN IF NOT EXISTS linkedin_profile_url TEXT",
+      "ALTER TABLE reviews ADD COLUMN IF NOT EXISTS author_name VARCHAR(255)",
     ];
     for (const sql of migrations) {
       try {
@@ -89,10 +90,11 @@ async function createReview({
   linkedin_id,
   linkedin_verified,
   linkedin_profile_url,
+  author_name,
 }) {
   const result = await getPool().query(
-    `INSERT INTO reviews (company_name, position, duration, rating, comment, email, siret, company_verified, linkedin_id, linkedin_verified, linkedin_profile_url)
-     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING id`,
+    `INSERT INTO reviews (company_name, position, duration, rating, comment, email, siret, company_verified, linkedin_id, linkedin_verified, linkedin_profile_url, author_name)
+     VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING id`,
     [
       company_name,
       position,
@@ -105,6 +107,7 @@ async function createReview({
       linkedin_id || null,
       linkedin_verified || false,
       linkedin_profile_url || null,
+      author_name || null,
     ],
   );
   return result.rows[0].id;
@@ -149,7 +152,7 @@ async function getValidatedReviews({
   params.push(limit);
   params.push(offset);
   const result = await getPool().query(
-    `SELECT id, company_name, position, duration, rating, comment, created_at, company_verified, admin_reply, flagged
+    `SELECT id, company_name, position, duration, rating, comment, created_at, company_verified, admin_reply, flagged, author_name
      FROM reviews ${whereClause} ORDER BY ${orderBy} LIMIT $${paramIndex++} OFFSET $${paramIndex++}`,
     params,
   );
@@ -282,7 +285,7 @@ async function flagReview(id, flagged) {
 
 async function getReviewById(id) {
   const result = await getPool().query(
-    `SELECT id, company_name, position, duration, rating, comment, created_at, company_verified, admin_reply, flagged
+    `SELECT id, company_name, position, duration, rating, comment, created_at, company_verified, admin_reply, flagged, author_name
      FROM reviews WHERE id = $1 AND is_validated = TRUE`,
     [id],
   );

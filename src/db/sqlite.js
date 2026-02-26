@@ -68,6 +68,11 @@ async function init() {
   } catch (_) {
     /* already exists */
   }
+  try {
+    conn.exec("ALTER TABLE reviews ADD COLUMN author_name TEXT");
+  } catch (_) {
+    /* already exists */
+  }
   // Indexes for query performance
   conn.exec(
     "CREATE INDEX IF NOT EXISTS idx_reviews_validated ON reviews(is_validated)",
@@ -99,10 +104,11 @@ async function createReview({
   linkedin_id,
   linkedin_verified,
   linkedin_profile_url,
+  author_name,
 }) {
   const stmt = getDb().prepare(
-    `INSERT INTO reviews (company_name, position, duration, rating, comment, email, siret, company_verified, linkedin_id, linkedin_verified, linkedin_profile_url)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+    `INSERT INTO reviews (company_name, position, duration, rating, comment, email, siret, company_verified, linkedin_id, linkedin_verified, linkedin_profile_url, author_name)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
   );
   const info = stmt.run(
     company_name,
@@ -116,6 +122,7 @@ async function createReview({
     linkedin_id || null,
     linkedin_verified ? 1 : 0,
     linkedin_profile_url || null,
+    author_name || null,
   );
   return info.lastInsertRowid;
 }
@@ -159,7 +166,7 @@ async function getValidatedReviews({
 
   params.push(limit, offset);
   const stmt = getDb().prepare(
-    `SELECT id, company_name, position, duration, rating, comment, created_at, company_verified, linkedin_verified, linkedin_profile_url, admin_reply, flagged
+    `SELECT id, company_name, position, duration, rating, comment, created_at, company_verified, linkedin_verified, linkedin_profile_url, admin_reply, flagged, author_name
      FROM reviews ${whereClause} ORDER BY ${orderBy} LIMIT ? OFFSET ?`,
   );
   const reviews = stmt.all(...params);
@@ -276,7 +283,7 @@ async function flagReview(id, flagged) {
 
 async function getReviewById(id) {
   const stmt = getDb().prepare(
-    `SELECT id, company_name, position, duration, rating, comment, created_at, company_verified, linkedin_verified, linkedin_profile_url, admin_reply, flagged
+    `SELECT id, company_name, position, duration, rating, comment, created_at, company_verified, linkedin_verified, linkedin_profile_url, admin_reply, flagged, author_name
      FROM reviews WHERE id = ? AND is_validated = 1`,
   );
   return stmt.get(id) || null;

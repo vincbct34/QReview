@@ -248,6 +248,30 @@
             </div>
 
             <div class="form-group">
+              <label for="author_name"
+                >Votre nom <span aria-hidden="true">*</span></label
+              >
+              <input
+                type="text"
+                id="author_name"
+                name="author_name"
+                required
+                aria-required="true"
+                maxlength="255"
+                autocomplete="name"
+                placeholder="Jean Dupont"
+              />
+              <small id="author-name-help"
+                >Sera affiche publiquement sur l'avis</small
+              >
+              <span
+                class="field-error"
+                id="author_name-error"
+                role="alert"
+              ></span>
+            </div>
+
+            <div class="form-group">
               <label id="rating-label"
                 >Note <span aria-hidden="true">*</span></label
               >

@@ -31,7 +31,6 @@ beforeAll(async () => {
   const compression = require("compression");
 
   const reviewsRouter = require("../src/routes/reviews");
-  const qrcodeRouter = require("../src/routes/qrcode");
   const { errorHandler } = require("../src/middleware/errorHandler");
 
   app = express();
@@ -40,7 +39,6 @@ beforeAll(async () => {
   app.use(express.json());
   app.use(express.static(path.join(__dirname, "..", "public")));
   app.use("/api/reviews", reviewsRouter);
-  app.use("/api/qrcode", qrcodeRouter);
   app.get("/health", (req, res) => res.json({ status: "ok" }));
   app.use(errorHandler);
 });
@@ -70,6 +68,7 @@ describe("Reviews API", () => {
     comment: "Great place to work",
     email: `test-${testId}@example.com`,
     siret: null,
+    author_name: "Test User",
   };
 
   describe("POST /api/reviews", () => {
@@ -167,6 +166,7 @@ describe("Reviews API", () => {
           ...validReview,
           email: `flag-${testId}@example.com`,
           company_name: "Flag Corp",
+          author_name: "Flag User",
         });
 
       const id = create.body.id;
@@ -199,36 +199,6 @@ describe("SIRET Verification", () => {
   });
 });
 
-// ─── QR Code ───
-
-describe("QR Code API", () => {
-  describe("GET /api/qrcode", () => {
-    it("should return QR code data URL", async () => {
-      const res = await request(app).get("/api/qrcode");
-      expect(res.status).toBe(200);
-      expect(res.body).toHaveProperty("qrCode");
-      expect(res.body).toHaveProperty("url");
-      expect(res.body.qrCode).toMatch(/^data:image\/png;base64,/);
-    });
-  });
-
-  describe("GET /api/qrcode/download", () => {
-    it("should return PNG buffer", async () => {
-      const res = await request(app).get("/api/qrcode/download");
-      expect(res.status).toBe(200);
-      expect(res.headers["content-type"]).toMatch(/image\/png/);
-    }, 15000);
-  });
-
-  describe("GET /api/qrcode/svg", () => {
-    it("should return SVG", async () => {
-      const res = await request(app).get("/api/qrcode/svg");
-      expect(res.status).toBe(200);
-      expect(res.headers["content-type"]).toMatch(/image\/svg/);
-    });
-  });
-});
-
 // ─── Admin Validation ───
 
 describe("Admin Validation", () => {
@@ -243,6 +213,7 @@ describe("Admin Validation", () => {
         comment: "Testing validation",
         email: `validate-${testId}@example.com`,
         siret: null,
+        author_name: "Validation User",
       });
 
     expect(create.status).toBe(200);
@@ -266,6 +237,7 @@ describe("Validators", () => {
       duration: "1 an",
       rating: 4,
       email: "test@test.com",
+      author_name: "Test User",
     });
     expect(errors).toHaveLength(0);
   });
@@ -282,6 +254,7 @@ describe("Validators", () => {
       duration: "1 an",
       rating: 10,
       email: "test@test.com",
+      author_name: "Test User",
     });
     expect(errors.length).toBeGreaterThan(0);
   });
@@ -293,6 +266,7 @@ describe("Validators", () => {
       duration: "1 an",
       rating: 3,
       email: "bad-email",
+      author_name: "Test User",
     });
     expect(errors.length).toBeGreaterThan(0);
   });

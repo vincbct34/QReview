@@ -12,6 +12,7 @@ function validateReview({
   email,
   comment,
   siret,
+  author_name,
 }) {
   const errors = [];
 
@@ -54,6 +55,16 @@ function validateReview({
     errors.push("A valid email is required");
   } else if (email.length > 255) {
     errors.push("email must be at most 255 characters");
+  }
+
+  if (
+    !author_name ||
+    typeof author_name !== "string" ||
+    author_name.trim().length === 0
+  ) {
+    errors.push("author_name is required");
+  } else if (author_name.length > 255) {
+    errors.push("author_name must be at most 255 characters");
   }
 
   if (comment && comment.length > 5000) {

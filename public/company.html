@@ -315,6 +315,11 @@
           '" class="permalink-link" title="Lien permanent">#' +
           r.id +
           "</a>";
+        const authorName = r.author_name
+          ? '<div class="review-author" style="font-size: 0.85rem; opacity: 0.7; margin-bottom: 4px;">Par <strong>' +
+            escapeHtml(r.author_name) +
+            "</strong></div>"
+          : "";
 
         return (
           '<div class="review-card" style="animation-delay:' +
@@ -337,6 +342,7 @@
           permalink +
           "</div>" +
           "</div>" +
+          authorName +
           '<div class="review-comment">' +
           comment +
           "</div>" +

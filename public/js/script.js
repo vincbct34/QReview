@@ -101,6 +101,21 @@ function populateFormWithLinkedIn(data) {
     emailInput.readOnly = true; // Lock field
   }
 
+  // Pre-fill author name
+  const authorNameInput = document.getElementById("author_name");
+  const authorNameHelp = document.getElementById("author-name-help");
+  if (authorNameInput && data.firstName && data.lastName) {
+    const fullName = `${data.firstName} ${data.lastName}`;
+    authorNameInput.value = fullName;
+    authorNameInput.classList.add("valid");
+    authorNameInput.readOnly = true; // Lock field
+    if (authorNameHelp) {
+      authorNameHelp.textContent =
+        "Verifie via LinkedIn - sera affiche publiquement";
+      authorNameHelp.style.color = "var(--primary)";
+    }
+  }
+
   // Show LinkedIn verified indicator
   const form = document.getElementById("review-form");
   if (form) {
@@ -274,6 +289,18 @@ async function loadReviews(page = 1) {
         <div class="review-header">
           <span class="company-name">
             <a href="/company/${encodeURIComponent(review.company_name)}" class="company-link">${escapeHtml(review.company_name)}</a>
+            ${
+              review.author_name
+                ? `
+              <span class="review-author">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle>
+                </svg>
+                ${escapeHtml(review.author_name)}
+              </span>
+            `
+                : ""
+            }
             ${
               review.company_verified
                 ? `
@@ -476,6 +503,7 @@ function initFormValidation() {
       maxLength: 255,
       pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
     },
+    author_name: { required: true, maxLength: 255 },
   };
 
   for (const [id, rules] of Object.entries(fields)) {
@@ -552,6 +580,7 @@ form.addEventListener("submit", async (e) => {
     position: formData.get("position"),
     duration: formData.get("duration"),
     email: formData.get("email"),
+    author_name: formData.get("author_name"),
     rating: ratingValue,
     comment: formData.get("comment") || null,
     siret: formData.get("siret") || null,
@@ -611,7 +640,14 @@ form.addEventListener("submit", async (e) => {
       .querySelectorAll(".form-group input, .form-group textarea")
       .forEach((el) => {
         el.classList.remove("valid", "invalid");
+        el.readOnly = false;
       });
+    // Reset LinkedIn help text
+    const authorNameHelp = document.getElementById("author-name-help");
+    if (authorNameHelp) {
+      authorNameHelp.textContent = "Sera affiche publiquement sur l'avis";
+      authorNameHelp.style.color = "";
+    }
     document
       .querySelectorAll(".field-error")
       .forEach((el) => (el.textContent = ""));

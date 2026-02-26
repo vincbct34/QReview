@@ -68,6 +68,7 @@ router.post(
       linkedin_id,
       linkedin_verified,
       linkedin_profile_url,
+      author_name,
     } = req.body;
 
     // Server-side validation
@@ -109,6 +110,7 @@ router.post(
       linkedin_id: linkedin_id || null,
       linkedin_verified: linkedin_verified || false,
       linkedin_profile_url: linkedin_profile_url || null,
+      author_name: author_name || null,
     });
 
     logger.info(
