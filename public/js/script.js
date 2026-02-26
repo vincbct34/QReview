@@ -104,8 +104,17 @@ function populateFormWithLinkedIn(data) {
   // Pre-fill author name
   const authorNameInput = document.getElementById("author_name");
   const authorNameHelp = document.getElementById("author-name-help");
-  if (authorNameInput && data.firstName && data.lastName) {
-    const fullName = `${data.firstName} ${data.lastName}`;
+
+  let fullName = data.name || "";
+  if (!fullName && data.firstName && data.lastName) {
+    fullName = `${data.firstName} ${data.lastName}`;
+  } else if (!fullName && data.firstName) {
+    fullName = data.firstName;
+  } else if (!fullName && data.lastName) {
+    fullName = data.lastName;
+  }
+
+  if (authorNameInput && fullName) {
     authorNameInput.value = fullName;
     authorNameInput.classList.add("valid");
     authorNameInput.readOnly = true; // Lock field
@@ -128,9 +137,18 @@ function showLinkedInStatus(data) {
   const connectBtn = document.getElementById("linkedin-connect-btn");
 
   if (statusDiv && data) {
+    let displayName = escapeHtml(data.name || "");
+    if (!displayName && data.firstName && data.lastName) {
+      displayName = `${escapeHtml(data.firstName)} ${escapeHtml(data.lastName)}`;
+    } else if (!displayName && data.firstName) {
+      displayName = escapeHtml(data.firstName);
+    } else if (!displayName && data.lastName) {
+      displayName = escapeHtml(data.lastName);
+    }
+
     statusDiv.innerHTML = `
       <div class="linkedin-status success">
-        ✓ Connecté en tant que <span class="linkedin-name">${escapeHtml(data.firstName)} ${escapeHtml(data.lastName)}</span>
+        ✓ Connecté en tant que <span class="linkedin-name">${displayName}</span>
         ${data.profileUrl ? `<a href="${escapeHtml(data.profileUrl)}" target="_blank" style="margin-left:8px;color:var(--primary);">Voir profil</a>` : ""}
       </div>
     `;

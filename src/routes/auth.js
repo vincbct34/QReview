@@ -45,6 +45,7 @@ if (process.env.LINKEDIN_CLIENT_ID && process.env.LINKEDIN_CLIENT_SECRET) {
         const userData = {
           id: userInfo.sub,
           linkedinId: userInfo.sub,
+          name: userInfo.name || "",
           firstName: userInfo.given_name || "",
           lastName: userInfo.family_name || "",
           email: userInfo.email || "",
