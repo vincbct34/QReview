@@ -15,6 +15,7 @@ const { apiLimiter } = require("./middleware/rateLimiter");
 const reviewsRouter = require("./routes/reviews");
 const adminRouter = require("./routes/admin");
 const authRouter = require("./routes/auth");
+const externalRouter = require("./routes/external");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -72,6 +73,7 @@ app.use("/api", apiLimiter);
 // ── API routes ──
 app.use("/auth", authRouter);
 app.use("/api/reviews", reviewsRouter);
+app.use("/api/external", externalRouter);
 app.use("/admin", adminRouter);
 
 // ── Health check ──
