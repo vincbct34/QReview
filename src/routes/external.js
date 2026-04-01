@@ -7,6 +7,7 @@ const logger = require("../utils/logger");
 const router = express.Router();
 
 const ALLOWED_ORIGINS = [
+  "https://404-factory.com",
   "https://404factory.vincent-bichat.fr",
   "https://portfolio.vincent-bichat.fr",
 ];
